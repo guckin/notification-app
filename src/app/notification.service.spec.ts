@@ -20,16 +20,27 @@ fdescribe('NotificationService', () => {
     eventSourceInstance = {} as EventSource;
   });
 
-  (['foo', 'bar'] as any[]).forEach(expected => {
+  ([
+    {
+      expectedNotification: 'foo',
+      expectError: 'bar'
+    },
+    {
+      expectedNotification: 'quz',
+      expectError: 'baz'
+    }] as any).forEach(({expectedNotification, expectError}) => {
     it('Gets the notifications', () => {
       spyOn(ngZone, 'run').and.callFake((fn: () => void) => fn());
       spyOn(sseService, 'getEventSource').and.callFake(() => eventSourceInstance);
 
-      service.notificationSubscription().subscribe((notification) => {
-        expect(notification).toBe(expected);
-      });
+      service
+        .notificationSubscription()
+        .subscribe(
+          notification => expect(notification).toBe(expectedNotification),
+            error => expect(error).toBe(expectError));
 
-      eventSourceInstance.onmessage({data: expected} as any);
+      eventSourceInstance.onmessage({data: expectedNotification} as any);
+      eventSourceInstance.onerror(expectError);
     });
   });
 });

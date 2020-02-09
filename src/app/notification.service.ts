@@ -18,9 +18,16 @@ export class NotificationService {
   notificationSubscription(): Observable<Notification> {
     return Observable.create(observer => {
       const eventSource = this.sseService.getEventSource();
+
       eventSource.onmessage = event => {
         this.ngZone.run(() => {
           observer.next(event.data);
+        });
+      };
+
+      eventSource.onerror = error => {
+        this.ngZone.run(() => {
+          observer.error(error);
         });
       };
     });
