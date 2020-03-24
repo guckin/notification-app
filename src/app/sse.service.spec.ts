@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { SseService } from './sse.service';
 import {APP_CONFIG} from './app-config';
 
-fdescribe('SseService', () => {
+describe('SseService', () => {
   const EventSourceUrl = 'http://example.com/foo';
 
   beforeEach(() => TestBed.configureTestingModule({
