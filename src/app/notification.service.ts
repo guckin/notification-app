@@ -1,4 +1,4 @@
-import {Inject, Injectable, NgZone} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {SseService} from './sse.service';
 
