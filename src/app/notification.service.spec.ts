@@ -10,8 +10,10 @@ fdescribe('NotificationService', () => {
 
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
-      NotificationService,
-      SseService
+      {
+        provide: SseService,
+        useValue: { getEventSource: () => null }
+      }
     ]
   }));
 
