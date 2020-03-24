@@ -7,5 +7,5 @@ export interface AppConfigInterface {
 export const APP_CONFIG = new InjectionToken<AppConfigInterface>('APP_CONFIG');
 
 export const AppConfig: AppConfigInterface = {
-  EventSourceUrl: ''
+  EventSourceUrl: 'http://localhost:8080/notifications'
 };
