@@ -10,21 +10,16 @@ fdescribe('NotificationService', () => {
 
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
-      {
-        provides: SseService,
-        useFactory: () => {
-          return {
-            getEventSource: () => eventSourceInstance
-          };
-        }
-      }
+      NotificationService,
+      SseService
     ]
   }));
 
   beforeEach(() => {
-    service = TestBed.get(NotificationService);
-    sseService = TestBed.get(SseService);
     eventSourceInstance = {} as EventSource;
+    sseService = TestBed.get(SseService);
+    spyOn(sseService, 'getEventSource').and.returnValue(eventSourceInstance);
+    service = TestBed.get(NotificationService);
   });
 
   ([
