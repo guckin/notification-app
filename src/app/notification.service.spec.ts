@@ -2,19 +2,26 @@ import { TestBed } from '@angular/core/testing';
 
 import { NotificationService } from './notification.service';
 import {SseService} from './sse.service';
-import {NgZone} from '@angular/core';
 
 fdescribe('NotificationService', () => {
   let service: NotificationService;
   let eventSourceInstance: EventSource;
-  let ngZone: NgZone;
   let sseService: SseService;
 
   beforeEach(() => TestBed.configureTestingModule({
+    providers: [
+      {
+        provides: SseService,
+        useFactory: () => {
+          return {
+            getEventSource: () => eventSourceInstance
+          };
+        }
+      }
+    ]
   }));
 
   beforeEach(() => {
-    ngZone = TestBed.get(NgZone);
     service = TestBed.get(NotificationService);
     sseService = TestBed.get(SseService);
     eventSourceInstance = {} as EventSource;
@@ -22,25 +29,33 @@ fdescribe('NotificationService', () => {
 
   ([
     {
+      description: 'Gets a notifications',
       expectedNotification: 'foo',
-      expectError: 'bar'
     },
     {
+      description: 'Gets a different notification',
       expectedNotification: 'quz',
-      expectError: 'baz'
-    }] as any).forEach(({expectedNotification, expectError}) => {
-    it('Gets the notifications', () => {
-      spyOn(ngZone, 'run').and.callFake((fn: () => void) => fn());
-      spyOn(sseService, 'getEventSource').and.callFake(() => eventSourceInstance);
+    }] as any).forEach(({expectedNotification, description}) => {
+      it(description, (done) => {
+        service
+          .notificationSubscription()
+          .subscribe(notification => {
+            expect(notification).toBe(expectedNotification);
+            done();
+          });
 
-      service
-        .notificationSubscription()
-        .subscribe(
-          notification => expect(notification).toBe(expectedNotification),
-            error => expect(error).toBe(expectError));
+        eventSourceInstance.onmessage({data: expectedNotification} as any);
+      });
 
-      eventSourceInstance.onmessage({data: expectedNotification} as any);
-      eventSourceInstance.onerror(expectError);
-    });
+      it('handles errors', (done) => {
+        service
+          .notificationSubscription()
+          .subscribe(() => {}, (err) => {
+            expect('error!').toEqual(err);
+            done();
+          });
+
+        eventSourceInstance.onerror('error!' as any);
+      });
   });
 });

@@ -12,23 +12,20 @@ export interface Notification {
 })
 export class NotificationService {
 
-  constructor(@Inject(NgZone) private readonly ngZone: NgZone,
-              @Inject(SseService) private readonly sseService: SseService) { }
+  constructor(
+    private readonly sseService: SseService
+  ) {}
 
   notificationSubscription(): Observable<Notification> {
     return Observable.create(observer => {
       const eventSource = this.sseService.getEventSource();
 
       eventSource.onmessage = event => {
-        this.ngZone.run(() => {
           observer.next(event.data);
-        });
       };
 
       eventSource.onerror = error => {
-        this.ngZone.run(() => {
           observer.error(error);
-        });
       };
     });
   }
