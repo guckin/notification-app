@@ -6,8 +6,8 @@ import {APP_CONFIG, AppConfig} from './app-config';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    NotificationComponent
+    NotificationComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule

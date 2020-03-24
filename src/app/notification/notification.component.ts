@@ -7,8 +7,8 @@ import {NotificationService} from '../notification.service';
   styleUrls: ['./notification.component.css']
 })
 export class NotificationComponent implements OnInit {
-  private msg: string;
-  private date: Date;
+  msg: string;
+  date: Date;
 
   constructor(private readonly notificationService: NotificationService) { }
 
