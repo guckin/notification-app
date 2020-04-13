@@ -36,14 +36,14 @@ describe('NotificationComponent', () => {
     });
 
     it('displays push notification', () => {
-        const date = new Date();
-        const msg = 'foo';
+        const date = 'foo';
+        const msg = 'bar';
         givenNotificationIs(msg, date);
 
         expectContentToEqual(`msg: ${msg}, date: ${date}`);
     });
 
-    function givenNotificationIs(msg: string, date: Date) {
+    function givenNotificationIs(msg: string, date: string) {
         notificationSubject.next({msg, date});
     }
 

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NotificationService} from '../notification.service';
+import {Notification, NotificationService} from '../notification.service';
 
 @Component({
     selector: 'app-notification',
@@ -7,8 +7,7 @@ import {NotificationService} from '../notification.service';
     styleUrls: ['./notification.component.css']
 })
 export class NotificationComponent implements OnInit {
-    msg: string;
-    date: Date;
+    currentNotification: Notification;
 
     constructor(private readonly notificationService: NotificationService) {
     }
@@ -16,9 +15,8 @@ export class NotificationComponent implements OnInit {
     ngOnInit() {
         this.notificationService
             .notificationSubscription()
-            .subscribe(({msg, date}) => {
-                this.msg = msg;
-                this.date = date;
+            .subscribe((notification) => {
+                this.currentNotification = notification;
             });
     }
 

@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
+import {Injectable, NgZone} from '@angular/core';
 import {Observable} from 'rxjs';
 import {SseService} from './sse.service';
 
 export interface Notification {
     msg: string;
-    date: Date;
+    date: string;
 }
 
 @Injectable({
@@ -13,6 +13,7 @@ export interface Notification {
 export class NotificationService {
 
     constructor(
+        private readonly zone: NgZone,
         private readonly sseService: SseService
     ) {
     }
@@ -22,12 +23,21 @@ export class NotificationService {
             const eventSource = this.sseService.getEventSource();
 
             eventSource.onmessage = event => {
-                observer.next(event.data);
+                this.zone.run(() => {
+                    observer.next(JSON.parse(event.data));
+                });
+            };
+
+            eventSource.onopen = () => {
+                console.log('Sse connection opened');
             };
 
             eventSource.onerror = error => {
-                observer.error(error);
+                this.zone.run(() => {
+                    observer.error(error);
+                });
             };
+            return () => eventSource.close();
         });
     }
 }
