@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {NotificationComponent} from './notification/notification.component';
 import {APP_CONFIG, AppConfig} from './app-config';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
     declarations: [
@@ -10,7 +11,8 @@ import {APP_CONFIG, AppConfig} from './app-config';
         AppComponent
     ],
     imports: [
-        BrowserModule
+        BrowserModule,
+        BrowserAnimationsModule
     ],
     providers: [
         {provide: APP_CONFIG, useValue: AppConfig}
