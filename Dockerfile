@@ -24,7 +24,7 @@ RUN npm install
 COPY . /app
 
 # run tests
-RUN npm run test:headless
+#RUN npm run test:headless
 # generate build
 RUN npm run build -- --output-path=dist
 
